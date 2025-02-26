@@ -1,12 +1,5 @@
 import sys
 
-def check_isnum(s):
-	if isinstance(s, (int, float)):
-		return 1
-	else:
-		return 0
-
-
 if __name__ == '__main__':
 	i = len(sys.argv) - 1
 	if i == 1:
