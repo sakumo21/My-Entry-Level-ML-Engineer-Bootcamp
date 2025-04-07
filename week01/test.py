@@ -1,12 +1,10 @@
-import pandas
+import matplotlib.pyplot as plt
+import numpy as np
 
-df = pandas.read_csv('Housing.csv')
-cleaned_df = df.drop_duplicates()
-cleaned_df = cleaned_df.dropna()
-
-columns = ["mainroad", "guestroom", "basement", "hotwaterheating", "airconditioning", "prefarea", "furnishingstatus"]
-
-for col in columns:
-    print(f"Value Counts for {col}")
-    print(cleaned_df[col].value_counts())
-    print()
+# fig = plt.figure()             # an empty figure with no Axes
+# fig, ax = plt.subplots()       # a figure with a single Axes
+# fig, axs = plt.subplots(2, 2)  # a figure with a 2x2 grid of Axes
+# # a figure with one Axes on the left, and two on the right:
+fig, axs = plt.subplot_mosaic([['left', 'right_top'],
+                               ['left', 'right_bottom']])
+plt.savefig("plot.png")
