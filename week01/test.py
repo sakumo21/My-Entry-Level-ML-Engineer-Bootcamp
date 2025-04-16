@@ -5,46 +5,12 @@ import pandas
 df = pandas.read_csv('Housing.csv')
 cleaned_df = df.drop_duplicates()
 cleaned_df = cleaned_df.dropna()
-columns = ["price", "area", "bedrooms", "bathrooms", "stories", "parking"]
-columns2 = ["mainroad", "guestroom", "basement", "hotwaterheating", "airconditioning", "prefarea", "furnishingstatus"]
 
-#============>histogram plots<============
+obj_col = cleaned_df.select_dtypes(include=['object']).columns
 
-fig1, axs = plt.subplots(2, 3, figsize=(15, 8))
-axs = axs.flatten()
+for col in obj_col:
+    cleaned_df[col] = cleaned_df[col].astype('category')
 
-for i, col in enumerate(columns):
-	sns.histplot(df[col], bins=20, kde=True, ax=axs[i])
-    
-plt.tight_layout()
-plt.savefig("plot.png") 
-plt.close(fig1)
-
-#============>boxplots<============
-
-fig2, axs2 = plt.subplots(2, 3, figsize=(15, 8))
-axs2 = axs2.flatten()
-
-for i, col in enumerate(columns):
-	sns.boxplot(data=df, x=col, ax=axs2[i])
-
-
-plt.tight_layout()
-plt.savefig("plot2.png") 
-plt.close(fig2)
-
-# #============>plot pie charts<============
-
-fig3, axs3 = plt.subplots(3, 3, figsize=(15, 15))
-axs3 = axs3.flatten()
-
-for i, col in enumerate(columns2):
-	counts = df[col].value_counts()
-	axs3[i].pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90)
-	axs3[i].set_title(f'Pie Chart of {col.capitalize()}')
-
-fig3.delaxes(axs3[7])
-fig3.delaxes(axs3[8])
-plt.tight_layout()
-plt.savefig("plot3.png")
-plt.close(fig3)
+cleaned_df[obj_col] = cleaned_df[obj_col].apply(lambda x: x.cat.codes)
+cleaned_df = pandas.get_dummies(cleaned_df, columns=['mainroad', 'guestroom', 'basement', 'hotwaterheating', 'airconditioning', 'prefarea', 'furnishingstatus'], dtype=int)
+cleaned_df.to_csv("Housing_with_new_feature.csv", index=False)
